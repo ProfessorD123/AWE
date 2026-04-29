@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}AmpWave Events – Powering Events{% endblock %}
+
+{% block extra_style %}
+.hero {
+    text-align: center;
+    padding: 110px 20px;
+    background: linear-gradient(to bottom, #121212, #1e1e1e);
+}
+.hero h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 3em;
+    margin-bottom: 20px;
+    line-height: 1.15;
+}
+.hero p {
+    font-size: 1.2em;
+    margin-bottom: 30px;
+    color: #ffffff;
+}
+.services-preview {
+    padding: 60px 40px;
+    text-align: center;
+}
+.services-preview h2 {
+    font-family: 'Montserrat', sans-serif;
+    margin-bottom: 40px;
+    border-left: 5px solid var(--gold);
+    display: inline-block;
+    padding-left: 10px;
+}
+.service-cards {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+.card {
+    background-color: var(--surface);
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px;
+    text-align: left;
+}
+.card img {
+    width: 100%;
+    border-radius: 5px;
+    height: 180px;
+    object-fit: cover;
+}
+.card h3 {
+    margin-top: 15px;
+    font-family: 'Montserrat', sans-serif;
+}
+.card p { font-size: 0.95em; color: #cccccc; }
+.cta-section {
+    text-align: center;
+    padding: 60px 20px;
+    background-color: #1a1a1a;
+}
+{% endblock %}
+
+{% block content %}
+<header class="hero">
+    <h1>Powering Events.<br>Amplifying Experiences.</h1>
+    <p>Professional Audio &amp; Event Production Services Across NSW &amp; ACT</p>
+    <a href="{{ url_for('contact') }}" class="cta-button">Get a Quote</a>
+</header>
+
+<section class="services-preview">
+    <h2>What We Do</h2>
+    <div class="service-cards">
+        <div class="card">
+            <img src="{{ url_for('static', filename='images/pa-system.jpg') }}" alt="PA System">
+            <h3>Live Sound</h3>
+            <p>High-quality PA systems and expert mixing for concerts, festivals, and school productions.</p>
+        </div>
+        <div class="card">
+            <img src="{{ url_for('static', filename='images/mixer.jpg') }}" alt="Digital Mixing Console">
+            <h3>Event Production</h3>
+            <p>Complete technical solutions including staging, monitoring, and wireless systems.</p>
+        </div>
+        <div class="card">
+            <img src="{{ url_for('static', filename='images/corporate-event.jpg') }}" alt="Corporate AV Setup">
+            <h3>Corporate AV</h3>
+            <p>Clear, reliable audio-visual systems for conferences and presentations, on budget.</p>
+        </div>
+    </div>
+</section>
+
+<section class="cta-section">
+    <h2>Ready to Power Your Event?</h2>
+    <a href="{{ url_for('contact') }}" class="cta-button">Contact Us Today</a>
+</section>
+{% endblock %}

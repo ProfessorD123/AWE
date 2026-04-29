@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}About Us – AmpWave Events{% endblock %}
+
+{% block extra_style %}
+.hero {
+    text-align: center;
+    padding: 100px 20px;
+    background: linear-gradient(to bottom, var(--gold), var(--surface));
+}
+.hero h1 { font-family: 'Montserrat', sans-serif; color: #121212; font-size: 2.6em; }
+.story, .mission {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+.story h2, .mission h2 {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--gold);
+}
+{% endblock %}
+
+{% block content %}
+<header class="hero">
+    <h1>About AmpWave Events</h1>
+</header>
+
+<section class="story">
+    <h2>Our Story</h2>
+    <p>AmpWave Events started with a simple idea: to create unforgettable experiences using the best in sound, lighting, and AV technology. From small community gatherings to large-scale productions, our goal has always been to make every event shine.</p>
+    <p>Our journey has been one of creativity, hard work, and a commitment to technical excellence. With each event we learn, innovate, and continue to raise the standard of live experiences.</p>
+</section>
+
+<section class="mission">
+    <h2>Our Mission</h2>
+    <p>At AmpWave Events, our mission is to deliver exceptional audio experiences that enhance every moment of your event. We are dedicated to providing top-tier sound equipment and expert technical support to ensure that your event is a success from start to finish.</p>
+</section>
+{% endblock %}

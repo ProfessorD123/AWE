@@ -1,0 +1,263 @@
+{% extends "base.html" %}
+{% block title %}Contact – AmpWave Events{% endblock %}
+
+{% block extra_style %}
+.contact-hero {
+    text-align: center;
+    padding: 70px 20px 50px;
+    background: linear-gradient(to bottom, var(--surface), var(--bg));
+    border-bottom: 1px solid #2e2e2e;
+}
+.contact-hero h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.6em;
+    margin-bottom: 10px;
+}
+.contact-hero p { color: #ccc; font-size: 1.05em; margin: 0; }
+
+.contact-wrap {
+    display: flex;
+    gap: 50px;
+    max-width: 1000px;
+    margin: 60px auto;
+    padding: 0 30px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+/* ── Info panel ──────────────────────────── */
+.contact-info {
+    flex: 1;
+    min-width: 240px;
+}
+.contact-info h2 {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--gold);
+    margin-bottom: 20px;
+    font-size: 1.4em;
+}
+.info-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    margin-bottom: 22px;
+}
+.info-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--surface);
+    border: 1px solid #333;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 1.1em;
+}
+.info-text strong { display: block; font-size: 0.85em; color: var(--gold); margin-bottom: 2px; letter-spacing: .04em; text-transform: uppercase; }
+.info-text a, .info-text span { color: #ccc; text-decoration: none; font-size: 0.97em; }
+.info-text a:hover { color: var(--gold); }
+
+.tos-note {
+    margin-top: 30px;
+    padding: 14px 16px;
+    background: #1a1a1a;
+    border-left: 3px solid var(--gold);
+    border-radius: 4px;
+    font-size: 0.88em;
+    color: #aaa;
+    line-height: 1.6;
+}
+.tos-note a { color: var(--gold); }
+
+/* ── Form ────────────────────────────────── */
+.contact-form {
+    flex: 2;
+    min-width: 300px;
+}
+.contact-form h2 {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--gold);
+    margin-bottom: 24px;
+    font-size: 1.4em;
+}
+
+.form-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 18px;
+    flex: 1;
+    min-width: 200px;
+}
+.form-group.full { flex: 0 0 100%; min-width: 100%; }
+
+label {
+    font-size: 0.85em;
+    font-weight: 500;
+    color: #ccc;
+    letter-spacing: .03em;
+    text-transform: uppercase;
+}
+label .req { color: var(--gold); }
+
+input, select, textarea {
+    background: var(--surface);
+    border: 1px solid #333;
+    border-radius: 6px;
+    color: var(--text);
+    padding: 11px 14px;
+    font-size: 0.97em;
+    font-family: 'Roboto', sans-serif;
+    transition: border-color .2s;
+    width: 100%;
+}
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--gold);
+}
+select option { background: var(--surface); }
+textarea { resize: vertical; min-height: 130px; }
+
+.form-footer {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 6px;
+}
+.form-footer p {
+    font-size: 0.82em;
+    color: #777;
+    margin: 0;
+    flex: 1;
+    min-width: 200px;
+}
+.form-footer p a { color: var(--gold); }
+
+.submit-btn {
+    padding: 13px 32px;
+    font-size: 1em;
+}
+
+@media (max-width: 680px) {
+    .form-row { flex-direction: column; }
+    .form-footer { flex-direction: column; align-items: flex-start; }
+}
+{% endblock %}
+
+{% block content %}
+<header class="contact-hero">
+    <h1>Get in Touch</h1>
+    <p>Tell us about your event and we'll put together a tailored quote.</p>
+</header>
+
+<div class="contact-wrap">
+
+    <!-- ── Info ──────────────────────────────────── -->
+    <aside class="contact-info">
+        <h2>Contact Details</h2>
+
+        <div class="info-item">
+            <div class="info-icon">✉</div>
+            <div class="info-text">
+                <strong>Email</strong>
+                <a href="mailto:info@ampwave.events">info@ampwave.events</a>
+            </div>
+        </div>
+
+        <div class="info-item">
+            <div class="info-icon">📍</div>
+            <div class="info-text">
+                <strong>Service Area</strong>
+                <span>NSW &amp; ACT, Australia</span>
+            </div>
+        </div>
+
+        <div class="info-item">
+            <div class="info-icon">🕐</div>
+            <div class="info-text">
+                <strong>Response Time</strong>
+                <span>Within 1–2 business days</span>
+            </div>
+        </div>
+
+        <div class="tos-note">
+            By submitting this form you acknowledge that you have read and agree to our
+            <a href="{{ url_for('tos') }}">Terms &amp; Conditions of Hire</a>.
+        </div>
+    </aside>
+
+    <!-- ── Form ──────────────────────────────────── -->
+    <section class="contact-form">
+        <h2>Send an Enquiry</h2>
+
+        <form method="POST" action="{{ url_for('contact') }}" novalidate>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="name">Full Name <span class="req">*</span></label>
+                    <input type="text" id="name" name="name"
+                           value="{{ form_data.get('name', '') }}"
+                           placeholder="Jane Smith" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address <span class="req">*</span></label>
+                    <input type="email" id="email" name="email"
+                           value="{{ form_data.get('email', '') }}"
+                           placeholder="jane@example.com" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone"
+                           value="{{ form_data.get('phone', '') }}"
+                           placeholder="04XX XXX XXX">
+                </div>
+                <div class="form-group">
+                    <label for="event_type">Event Type</label>
+                    <select id="event_type" name="event_type">
+                        <option value="" {% if not form_data.get('event_type') %}selected{% endif %}>Select…</option>
+                        <option value="Concert / Festival"          {% if form_data.get('event_type') == 'Concert / Festival'          %}selected{% endif %}>Concert / Festival</option>
+                        <option value="School / College Production" {% if form_data.get('event_type') == 'School / College Production' %}selected{% endif %}>School / College Production</option>
+                        <option value="Corporate Conference"        {% if form_data.get('event_type') == 'Corporate Conference'        %}selected{% endif %}>Corporate Conference</option>
+                        <option value="Private / Social Event"      {% if form_data.get('event_type') == 'Private / Social Event'      %}selected{% endif %}>Private / Social Event</option>
+                        <option value="Other"                       {% if form_data.get('event_type') == 'Other'                       %}selected{% endif %}>Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group full">
+                <label for="event_date">Approximate Event Date</label>
+                <input type="date" id="event_date" name="event_date"
+                       value="{{ form_data.get('event_date', '') }}">
+            </div>
+
+            <div class="form-group full">
+                <label for="message">Message <span class="req">*</span></label>
+                <textarea id="message" name="message"
+                          placeholder="Tell us about your event — venue, expected audience size, equipment needed, etc."
+                          required>{{ form_data.get('message', '') }}</textarea>
+            </div>
+
+            <div class="form-footer">
+                <p>
+                    Fields marked <span style="color:var(--gold)">*</span> are required.
+                    By submitting you agree to our
+                    <a href="{{ url_for('tos') }}">Terms &amp; Conditions of Hire</a>.
+                </p>
+                <button type="submit" class="cta-button submit-btn">Send Enquiry →</button>
+            </div>
+
+        </form>
+    </section>
+
+</div>
+{% endblock %}

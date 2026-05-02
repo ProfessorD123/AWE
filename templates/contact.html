@@ -253,11 +253,16 @@ textarea { resize: vertical; min-height: 130px; }
                     By submitting you agree to our
                     <a href="{{ url_for('tos') }}">Terms &amp; Conditions of Hire</a>.
                 </p>
+
+                <!-- Cloudflare Turnstile -->
+                <div class="cf-turnstile"
+                    data-sitekey="YOUR_SITE_KEY"
+                    data-theme="dark"
+                    style="margin-bottom: 12px;">
+                        </div>
+
+                    </form>
+                </section>
                 <button type="submit" class="cta-button submit-btn">Send Enquiry →</button>
             </div>
-
-        </form>
-    </section>
-
-</div>
 {% endblock %}

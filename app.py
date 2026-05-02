@@ -6,7 +6,6 @@ from email.mime.multipart import MIMEMultipart
 from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, flash
 from dotenv import load_dotenv
-import requests   # ← NEW (required for Turnstile verification)
 
 load_dotenv()
 
@@ -22,32 +21,9 @@ logger = logging.getLogger(__name__)
 # ──────────────────────────────────────────────
 SMTP_HOST     = os.getenv("SMTP_HOST", "smtp.gmail.com")
 SMTP_PORT     = int(os.getenv("SMTP_PORT", 587))
-SMTP_USER     = os.getenv("SMTP_USER")
-SMTP_PASSWORD = os.getenv("SMTP_PASSWORD")
+SMTP_USER     = os.getenv("SMTP_USER")          # your sending address
+SMTP_PASSWORD = os.getenv("SMTP_PASSWORD")      # app password / SMTP password
 CONTACT_EMAIL = os.getenv("CONTACT_EMAIL", "info@ampwave.events")
-
-# ──────────────────────────────────────────────
-# Cloudflare Turnstile
-# ──────────────────────────────────────────────
-TURNSTILE_SECRET = os.getenv("TURNSTILE_SECRET")   # ← NEW
-
-def verify_turnstile(response_token, remote_ip):
-    """Verify Cloudflare Turnstile token."""
-    try:
-        r = requests.post(
-            "https://challenges.cloudflare.com/turnstile/v0/siteverify",
-            data={
-                "secret": TURNSTILE_SECRET,
-                "response": response_token,
-                "remoteip": remote_ip
-            },
-            timeout=5
-        )
-        result = r.json()
-        return result.get("success", False)
-    except Exception as exc:
-        logger.error("Turnstile verification failed: %s", exc)
-        return False
 
 
 def send_contact_email(name: str, email: str, phone: str, event_type: str,
@@ -149,14 +125,6 @@ def services():
 @app.route("/contact", methods=["GET", "POST"])
 def contact():
     if request.method == "POST":
-
-        # ── NEW: Turnstile token check ───────────────────────────────
-        token = request.form.get("cf-turnstile-response")
-        if not token or not verify_turnstile(token, request.remote_addr):
-            flash("Verification failed — please try again.", "error")
-            return render_template("contact.html", form_data=request.form)
-        # ─────────────────────────────────────────────────────────────
-
         name       = request.form.get("name", "").strip()
         email      = request.form.get("email", "").strip()
         phone      = request.form.get("phone", "").strip()

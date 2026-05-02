@@ -1,9 +1,6 @@
 import os
-import json
 import smtplib
 import logging
-import urllib.request
-import urllib.parse
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from datetime import datetime
@@ -27,35 +24,6 @@ SMTP_PORT     = int(os.getenv("SMTP_PORT", 587))
 SMTP_USER     = os.getenv("SMTP_USER")          # your sending address
 SMTP_PASSWORD = os.getenv("SMTP_PASSWORD")      # app password / SMTP password
 CONTACT_EMAIL = os.getenv("CONTACT_EMAIL", "info@ampwave.events")
-
-# ──────────────────────────────────────────────
-# Cloudflare Turnstile config
-# ──────────────────────────────────────────────
-TURNSTILE_SITE_KEY   = os.getenv("TURNSTILE_SITE_KEY", "")
-TURNSTILE_SECRET_KEY = os.getenv("TURNSTILE_SECRET_KEY", "")
-TURNSTILE_VERIFY_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify"
-
-
-def verify_turnstile(token: str) -> bool:
-    """Verify a Turnstile challenge token with Cloudflare's API."""
-    if not TURNSTILE_SECRET_KEY:
-        logger.warning("TURNSTILE_SECRET_KEY not set — skipping verification")
-        return True
-    if not token:
-        return False
-    try:
-        data = urllib.parse.urlencode({
-            "secret":   TURNSTILE_SECRET_KEY,
-            "response": token,
-            "remoteip": request.remote_addr,
-        }).encode()
-        req  = urllib.request.Request(TURNSTILE_VERIFY_URL, data=data)
-        with urllib.request.urlopen(req, timeout=5) as resp:
-            result = json.loads(resp.read())
-        return bool(result.get("success"))
-    except Exception as exc:
-        logger.error("Turnstile verification error: %s", exc)
-        return False
 
 
 def send_contact_email(name: str, email: str, phone: str, event_type: str,
@@ -163,22 +131,17 @@ def contact():
         event_type = request.form.get("event_type", "").strip()
         event_date = request.form.get("event_date", "").strip()
         message    = request.form.get("message", "").strip()
-        ts_token   = request.form.get("cf-turnstile-response", "")
 
         errors = []
         if not name:    errors.append("Name is required.")
         if not email:   errors.append("Email is required.")
         if not message: errors.append("Message is required.")
 
-        if not verify_turnstile(ts_token):
-            errors.append("Human verification failed. Please try again.")
-
         if errors:
             for e in errors:
                 flash(e, "error")
             return render_template("contact.html",
-                                   form_data=request.form,
-                                   turnstile_site_key=TURNSTILE_SITE_KEY)
+                                   form_data=request.form)
 
         if send_contact_email(name, email, phone, event_type, event_date, message):
             flash("Thanks! We'll be in touch within 1–2 business days.", "success")
@@ -186,13 +149,9 @@ def contact():
         else:
             flash("Something went wrong sending your message. "
                   "Please email us directly at info@ampwave.events.", "error")
-            return render_template("contact.html",
-                                   form_data=request.form,
-                                   turnstile_site_key=TURNSTILE_SITE_KEY)
+            return render_template("contact.html", form_data=request.form)
 
-    return render_template("contact.html",
-                           form_data={},
-                           turnstile_site_key=TURNSTILE_SITE_KEY)
+    return render_template("contact.html", form_data={})
 
 
 @app.route("/tos")
